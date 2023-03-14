@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+{% block title %}Startseite{% endblock %}
+{% block nav_title %}Startseite{% endblock %}
+{% block body %}
+<div class="modal" id="modal-flyer" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 12px; top: 12px;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <img src="/assets/img/200817_Melden-Sie-Leerstand-v1.jpg" style="width: 100%; border-radius: .3rem;">
+                <p class="text-justify m-4"><b>Leerstand und Zweckentfremdung von Wohnraum sind Probleme in Reutlingen.</b> Wohnungen werden trotz hohem Bedarf leer gelassen oder für das Gewerbe zweckentfremdet, weil das für die Eigentümer profitabler ist. In Artikel 14 des Grundgesetzes steht "Eigentum verpflichtet. Sein Gebrauch soll zugleich dem Wohle der Allgemeinheit dienen." - Wohnraum leer stehen zu lassen oder einem anderen Zweck als dem Wohnen zuzuführen widerspricht dem Recht auf Eigentum. Daraus muss die Politik und Verwaltung Konsequenzen ziehen - Deshalb rufen wir die Öffentlichkeit dazu auf Leerstand zu melden, damit wir gemeinsam politischen Druck aufbauen können, um diesen Zustand nachhaltig zu bekämpfen, damit der Wohnraum wieder den Bürgerinnen und Bürgern zur Verfügung steht.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid p-0 h-100">
+    <div class="row h-100">
+        <div class="col-lg-5 h-100 mb-2">
+            <div class="card h-100">
+                <div class="card-body h-100">
+                    <table id="haustable" class="table table-condensed table-striped table-borderless">
+                        <thead>
+                            <tr>
+                                <th>Adresse</th>
+                                <th class="d-none d-lg-table-cell">Ort</th>
+                                <th class="d-none d-lg-table-cell">PLZ</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for haus in haeuser  %}
+                        <tr>
+                            <td>{{ haus.adresse }}</td>
+                            <td class="d-none d-lg-table-cell">{{ haus.ort }}</td>
+                            <td class="d-none d-lg-table-cell">{{ haus.plz }}</td>
+                            <td>{{ haus.status }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7 h-100 mb-2">
+            <div class="card h-100">
+                <div class="card-body h-100">
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+var map;
+var haeusergeo = [];
+var haeuser = [
+{% for haus in haeuser  %}
+['{{ haus.id }}', '{{ haus.adresse }}', '{{ haus.ort }}', '{{ haus.plz }}', '{{ haus.status }}', '{{ haus.lat }}', '{{ haus.lng }}'],
+{% endfor %}
+];
+$( document ).ready(function() {
+    map = L.map('map', {
+        dragging: true,
+        minZoom: 12,
+        maxZoom: 18
+    }).setView([48.4897254, 9.2183238], 14);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+    haeuser.forEach(function(item){
+        if(item[5] != '' && item[6] != ''){
+            L.marker([item[5], item[6]]).addTo(map);
+        }
+    });
+    $('#haustable').DataTable({
+        pageResize: true,
+        language: {
+            url: '/assets/json/datatables.german.json',
+        },
+        bLengthChange: false,
+        bFilter: true,
+    });
+    $('#modal-flyer').modal('show');
+});
+</script>
+{% endblock %}

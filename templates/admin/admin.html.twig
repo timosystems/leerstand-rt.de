@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+{% block title %}Admin{% endblock %}
+{% block nav_title %}Admin{% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Haus hinzufügen</span>
+                </div>
+                <div class="card-body">
+                    {{ form(form) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Häuser</span>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Adresse</th>
+                                <th>Ort</th>
+                                <th>PLZ</th>
+                                <th>Status</th>
+                                <th>Löschen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for haus in haeuser  %}
+                            <tr>
+                                <td>{{ haus.id }}</td>
+                                <td>{{ haus.adresse }}</td>
+                                <td>{{ haus.ort }}</td>
+                                <td>{{ haus.plz }}</td>
+                                <td>{{ haus.status }}</td>
+                                <td><a href="/admin/haus/{{ haus.id }}/delete">Löschen</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
