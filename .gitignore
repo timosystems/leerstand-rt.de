@@ -1,5 +1,6 @@
-# Local Config
+# Local files
 /.env.local
+/composer.lock
 
 # Cache and logs (Symfony2)
 /app/cache/*
