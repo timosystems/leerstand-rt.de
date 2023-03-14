@@ -33,5 +33,9 @@ To setup this project, you must:
     $manager->persist($user);
     $manager->flush();
     ```
+    and run inside of the projects root directory in the shell of your webserver (php needed)
+    ```
+    bin/console doctrine:fixtures:load
+    ```
 4. setup your webserver so that the project root directory is /public
 5. Visit your website, it should now display an empty map.
